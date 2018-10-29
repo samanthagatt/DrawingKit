@@ -18,6 +18,12 @@ public class CanvasView: UIView {
         // Quick fix for palm rejection
         // Should be changed if I get to pinch to zoom
         self.isMultipleTouchEnabled = false
+        
+        // Appends an empty image to backlog so first stroke can be undone
+        UIGraphicsBeginImageContext(frame.size)
+        guard let image = UIGraphicsGetImageFromCurrentImageContext() else { return }
+        UIGraphicsEndImageContext()
+        backlog.append(image)
     }
     
     public required init?(coder aDecoder: NSCoder) {
@@ -26,38 +32,52 @@ public class CanvasView: UIView {
         // Quick fix for palm rejection
         // Should be changed if I get to pinch to zoom
         self.isMultipleTouchEnabled = false
+        
+        // Appends an empty image to backlog so first stroke can be undone
+        UIGraphicsBeginImageContext(frame.size)
+        guard let image = UIGraphicsGetImageFromCurrentImageContext() else { return }
+        UIGraphicsEndImageContext()
+        backlog.append(image)
     }
     
     
     // MARK: - Private Properties
     
     private var currentPath = UIBezierPath()
-    private var intermediateImage: UIImage?
     private var bezierPoints: [CGPoint] = []
     
-//    private var backlog: [UIImage] = []
-//    private var forwardLog: [UIImage] = []
+    private var backlog: [UIImage] = [] {
+        didSet {
+            if backlog.count > numberOfUndosSupported + 1 {
+                backlog.removeFirst()
+            }
+        }
+    }
+    private var forwardLog: [UIImage] = []
+    private var undoCount = 0
     
     
     // MARK: - Public Properties
     
-    public var defaultLineWidth = 4.0
-    public var strokeColor = UIColor.black {
+    public var defaultLineWidth: CGFloat = 2.0
+    public var strokeColor = UIColor.blue {
         didSet {
             strokeColor.setStroke()
         }
     }
+    public var numberOfUndosSupported = 10
     
     // MARK: - Private Functions
     
     private func convertToImage() {
         UIGraphicsBeginImageContextWithOptions(bounds.size, false, 0.0)
-        if let intermediateImage = intermediateImage {
-            intermediateImage.draw(at: .zero)
+        if let lastImage = backlog.last {
+            lastImage.draw(at: .zero)
         }
-        strokeColor.setStroke()
-        currentPath.stroke()
-        intermediateImage = UIGraphicsGetImageFromCurrentImageContext()
+        strokeCurrentPath()
+        if let image = UIGraphicsGetImageFromCurrentImageContext() {
+            backlog.append(image)
+        }
         UIGraphicsEndImageContext()
     }
     
@@ -79,21 +99,41 @@ public class CanvasView: UIView {
         }
     }
     
+    private func strokeCurrentPath() {
+        strokeColor.setStroke()
+        currentPath.lineCapStyle = .round
+        currentPath.lineWidth = defaultLineWidth
+        currentPath.stroke()
+    }
+    
     
     // MARK: - Public Functions
     
+    public func undo() {
+        // Conditional statement makes sure there is always one image in the backlog so you can't undo too many times and erase the entire user drawn image
+        // Requires there to be one image in the backlog in the init calls so the first stroke the user makes can be undone
+        if backlog.count > 1 {
+            guard let image = backlog.popLast() else { return }
+            forwardLog.append(image)
+            setNeedsDisplay()
+        }
+    }
     
+    public func redo() {
+        guard let image = forwardLog.popLast() else { return }
+        backlog.append(image)
+        setNeedsDisplay()
+    }
     
     
     // MARK: - UIView Draw
     
     public override func draw(_ rect: CGRect) {
-        if let intermediateImage = intermediateImage {
-            intermediateImage.draw(in: rect)
+        if let lastImage = backlog.last {
+            lastImage.draw(in: rect)
         }
         
-        // Should do nothing when called in touchesEnded since it's already been called in convertToImage()
-        currentPath.stroke()
+        strokeCurrentPath()
     }
     
     
@@ -102,6 +142,8 @@ public class CanvasView: UIView {
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
         let point = touch.location(in: self)
+        
+        forwardLog.removeAll()
         
         bezierPoints.append(point)
 }
@@ -130,12 +172,13 @@ public class CanvasView: UIView {
         
         bezierPoints.append(point)
         addCurveToBezierPath()
+        currentPath.move(to: bezierPoints[0])
         if bezierPoints.count == 4 {
-            currentPath.move(to: bezierPoints[0])
             currentPath.addCurve(to: bezierPoints[3], controlPoint1: bezierPoints[1], controlPoint2: bezierPoints[2])
         } else if bezierPoints.count == 3 {
-            currentPath.move(to: bezierPoints[0])
             currentPath.addQuadCurve(to: bezierPoints[2], controlPoint: bezierPoints[1])
+        } else if bezierPoints.count == 2 {
+            currentPath.addLine(to: bezierPoints[1])
         }
         
         convertToImage()

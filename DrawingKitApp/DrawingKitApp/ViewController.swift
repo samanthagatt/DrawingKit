@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import DrawingKit
 
 class ViewController: UIViewController {
 
@@ -14,7 +15,16 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
     }
-
-
+    
+    @IBOutlet weak var canvasView: CanvasView!
+    
+    @IBAction func undo(_ sender: Any) {
+        canvasView.undo()
+    }
+    
+    @IBAction func redo(_ sender: Any) {
+        canvasView.redo()
+    }
+    
 }
 
