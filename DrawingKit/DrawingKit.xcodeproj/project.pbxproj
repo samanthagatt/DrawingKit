@@ -48,19 +48,11 @@
 		22BE99ED2187411000707BDB /* DrawingKit */ = {
 			isa = PBXGroup;
 			children = (
-				22BE9A022187416600707BDB /* Content */,
+				22BE9A03218741BE00707BDB /* CanvasView.swift */,
 				22BE99EE2187411000707BDB /* DrawingKit.h */,
 				22BE99EF2187411000707BDB /* Info.plist */,
 			);
 			path = DrawingKit;
-			sourceTree = "<group>";
-		};
-		22BE9A022187416600707BDB /* Content */ = {
-			isa = PBXGroup;
-			children = (
-				22BE9A03218741BE00707BDB /* CanvasView.swift */,
-			);
-			path = Content;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

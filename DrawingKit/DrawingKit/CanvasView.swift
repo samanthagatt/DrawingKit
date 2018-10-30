@@ -61,6 +61,8 @@ public class CanvasView: UIView {
     
     public var strokeLineWidth: CGFloat = 2.0
     public var strokeColor = UIColor.blue
+    public var strokeAlpha: CGFloat = 1.0
+    public var strokeBlendMode: CGBlendMode = .normal
     public var numberOfUndosSupported = 10
     
     // MARK: - Private Functions
@@ -99,7 +101,7 @@ public class CanvasView: UIView {
         strokeColor.setStroke()
         currentPath.lineCapStyle = .round
         currentPath.lineWidth = strokeLineWidth
-        currentPath.stroke()
+        currentPath.stroke(with: strokeBlendMode, alpha: strokeAlpha)
     }
     
     
