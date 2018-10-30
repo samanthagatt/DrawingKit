@@ -59,12 +59,8 @@ public class CanvasView: UIView {
     
     // MARK: - Public Properties
     
-    public var defaultLineWidth: CGFloat = 2.0
-    public var strokeColor = UIColor.blue {
-        didSet {
-            strokeColor.setStroke()
-        }
-    }
+    public var strokeLineWidth: CGFloat = 2.0
+    public var strokeColor = UIColor.blue
     public var numberOfUndosSupported = 10
     
     // MARK: - Private Functions
@@ -102,7 +98,7 @@ public class CanvasView: UIView {
     private func strokeCurrentPath() {
         strokeColor.setStroke()
         currentPath.lineCapStyle = .round
-        currentPath.lineWidth = defaultLineWidth
+        currentPath.lineWidth = strokeLineWidth
         currentPath.stroke()
     }
     
@@ -184,7 +180,7 @@ public class CanvasView: UIView {
         convertToImage()
         setNeedsDisplay()
         bezierPoints.removeAll()
-        currentPath = UIBezierPath()
+        currentPath.removeAllPoints()
     }
     
     public override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
