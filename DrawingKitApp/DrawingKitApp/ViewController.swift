@@ -17,6 +17,7 @@ class ViewController: UIViewController {
     }
     
     @IBOutlet weak var canvasView: CanvasView!
+    @IBOutlet weak var eraserModeButton: UIButton!
     
     @IBAction func undo(_ sender: Any) {
         canvasView.undo()
@@ -26,5 +27,13 @@ class ViewController: UIViewController {
         canvasView.redo()
     }
     
+    @IBAction func toggleEraserMode(_ sender: Any) {
+        canvasView.strokeIsEraser = !canvasView.strokeIsEraser
+        if canvasView.strokeIsEraser == true {
+            eraserModeButton.setTitle("Draw", for: .normal)
+        } else {
+            eraserModeButton.setTitle("Erase", for: .normal)
+        }
+    }
 }
 

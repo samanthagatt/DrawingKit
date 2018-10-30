@@ -6,6 +6,7 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -19,32 +20,44 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ien-Me-E68" customClass="CanvasView" customModule="DrawingKit">
                                 <rect key="frame" x="0.0" y="20" width="375" height="647"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
-                            <stackView opaque="NO" contentMode="scaleToFill" spacing="29" translatesAutoresizingMaskIntoConstraints="NO" id="B7n-NT-4AR">
-                                <rect key="frame" x="223" y="70" width="102" height="30"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="yF3-I8-3Px">
+                                <rect key="frame" x="223" y="70" width="102" height="68"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wMS-my-ij4">
-                                        <rect key="frame" x="0.0" y="0.0" width="37" height="30"/>
-                                        <state key="normal" title="Undo"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="29" translatesAutoresizingMaskIntoConstraints="NO" id="B7n-NT-4AR">
+                                        <rect key="frame" x="0.0" y="0.0" width="102" height="30"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wMS-my-ij4">
+                                                <rect key="frame" x="0.0" y="0.0" width="37" height="30"/>
+                                                <state key="normal" title="Undo"/>
+                                                <connections>
+                                                    <action selector="undo:" destination="BYZ-38-t0r" eventType="touchUpInside" id="6Sz-rX-5x1"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IN9-Fq-Q3o">
+                                                <rect key="frame" x="66" y="0.0" width="36" height="30"/>
+                                                <state key="normal" title="Redo"/>
+                                                <connections>
+                                                    <action selector="redo:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qf7-kP-bvz"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qNP-G2-ccm">
+                                        <rect key="frame" x="31.5" y="38" width="39" height="30"/>
+                                        <state key="normal" title="Erase"/>
                                         <connections>
-                                            <action selector="undo:" destination="BYZ-38-t0r" eventType="touchUpInside" id="6Sz-rX-5x1"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IN9-Fq-Q3o">
-                                        <rect key="frame" x="66" y="0.0" width="36" height="30"/>
-                                        <state key="normal" title="Redo"/>
-                                        <connections>
-                                            <action selector="redo:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qf7-kP-bvz"/>
+                                            <action selector="toggleEraserMode:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Kab-Pa-Tp2"/>
                                         </connections>
                                     </button>
                                 </subviews>
                             </stackView>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.55294117649999996" green="0.80000000000000004" blue="0.58431372550000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="B7n-NT-4AR" secondAttribute="trailing" constant="50" id="8FU-a0-h8s"/>
-                            <constraint firstItem="B7n-NT-4AR" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="50" id="HEF-d4-t2W"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="yF3-I8-3Px" secondAttribute="trailing" constant="50" id="1TL-Xk-c6w"/>
+                            <constraint firstItem="yF3-I8-3Px" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="50" id="1mg-J9-V3z"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="ien-Me-E68" secondAttribute="trailing" id="Lcr-OM-epC"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="ien-Me-E68" secondAttribute="bottom" id="eVb-LM-bCT"/>
                             <constraint firstItem="ien-Me-E68" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="fXY-kZ-9IB"/>
@@ -54,6 +67,7 @@
                     </view>
                     <connections>
                         <outlet property="canvasView" destination="ien-Me-E68" id="sbz-TP-0Ge"/>
+                        <outlet property="eraserModeButton" destination="qNP-G2-ccm" id="qK6-Ao-yQ2"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
