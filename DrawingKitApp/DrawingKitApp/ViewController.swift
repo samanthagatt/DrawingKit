@@ -15,6 +15,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         _ = canvasView.toggleEditIsEnabled()
+        canvasView.startingImage = UIImage(named: "arrow")
     }
     
     @IBOutlet weak var canvasView: CanvasView!

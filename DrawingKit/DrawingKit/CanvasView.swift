@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 public class CanvasView: UIView {
     
@@ -59,6 +60,14 @@ public class CanvasView: UIView {
     
     // MARK: - Public Properties
     
+    /// Only to be set before user starts drawing
+    public var startingImage: UIImage? {
+        didSet {
+            guard let image = startingImage, backlog.count == 1 else { return }
+            backlog[0] = image
+            setNeedsDisplay()
+        }
+    }
     public var strokeLineWidth: CGFloat = 2.0
     public var strokeColor = UIColor.blue
     public var strokeAlpha: CGFloat = 1.0
@@ -66,12 +75,14 @@ public class CanvasView: UIView {
     public var strokeIsEraser = false
     public var numberOfUndosSupported = 10
     
+    
     // MARK: - Private Functions
     
     private func convertToImage() {
         UIGraphicsBeginImageContextWithOptions(bounds.size, false, 0.0)
         if let lastImage = backlog.last {
-            lastImage.draw(at: .zero)
+            let rect = AVMakeRect(aspectRatio: lastImage.size, insideRect: self.bounds)
+            lastImage.draw(in: rect)
         }
         strokeCurrentPath()
         if let image = UIGraphicsGetImageFromCurrentImageContext() {
@@ -142,6 +153,7 @@ public class CanvasView: UIView {
     
     public override func draw(_ rect: CGRect) {
         if let lastImage = backlog.last {
+            let rect = AVMakeRect(aspectRatio: lastImage.size, insideRect: self.bounds)
             lastImage.draw(in: rect)
         }
         
