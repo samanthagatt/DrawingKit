@@ -14,10 +14,12 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        _ = canvasView.toggleEditIsEnabled()
     }
     
     @IBOutlet weak var canvasView: CanvasView!
     @IBOutlet weak var eraserModeButton: UIButton!
+    @IBOutlet weak var editDoneButton: UIButton!
     
     @IBAction func undo(_ sender: Any) {
         canvasView.undo()
@@ -34,6 +36,11 @@ class ViewController: UIViewController {
         } else {
             eraserModeButton.setTitle("Erase", for: .normal)
         }
+    }
+    
+    @IBAction func toggleEdit(_ sender: Any) {
+        let status = canvasView.toggleEditIsEnabled()
+        editDoneButton.setTitle(status ? "Done" : "Edit", for: .normal)
     }
 }
 

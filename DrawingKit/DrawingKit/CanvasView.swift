@@ -126,6 +126,17 @@ public class CanvasView: UIView {
         setNeedsDisplay()
     }
     
+    public func getCurrentImage() -> UIImage? {
+        return backlog.last
+    }
+    
+    /// Returns the current status of editability AFTER it has been toggled
+    public func toggleEditIsEnabled() -> Bool {
+        let status = self.isUserInteractionEnabled
+        self.isUserInteractionEnabled = !status
+        return !status
+    }
+    
     
     // MARK: - UIView Draw
     
