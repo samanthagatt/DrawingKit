@@ -24,6 +24,7 @@ public class CanvasView: UIView {
         UIGraphicsBeginImageContext(frame.size)
         guard let image = UIGraphicsGetImageFromCurrentImageContext() else { return }
         UIGraphicsEndImageContext()
+        blankImage = image
         backlog.append(image)
     }
     
@@ -38,6 +39,7 @@ public class CanvasView: UIView {
         UIGraphicsBeginImageContext(frame.size)
         guard let image = UIGraphicsGetImageFromCurrentImageContext() else { return }
         UIGraphicsEndImageContext()
+        blankImage = image
         backlog.append(image)
     }
     
@@ -56,6 +58,8 @@ public class CanvasView: UIView {
     }
     private var forwardLog: [UIImage] = []
     private var undoCount = 0
+    
+    private var blankImage: UIImage!
     
     
     // MARK: - Public Properties
@@ -146,6 +150,18 @@ public class CanvasView: UIView {
         let status = self.isUserInteractionEnabled
         self.isUserInteractionEnabled = !status
         return !status
+    }
+    
+    public func resetCanvas(with image: UIImage? = nil) {
+        
+        var newImage: UIImage
+        if let image = image {
+            newImage = image
+        } else {
+            newImage = self.blankImage
+        }
+        backlog = [newImage]
+        setNeedsDisplay()
     }
     
     
